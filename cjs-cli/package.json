@@ -1,0 +1,9 @@
+{
+  "name": "cjs-cli",
+  "private": true,
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@mister-webhooks/client": "^0.0.4",
+    "commander": "^14.0.0"
+  }
+}

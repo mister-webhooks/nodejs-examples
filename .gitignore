@@ -1,0 +1,11 @@
+# This gitignore is not meant for use in your own projects. Just copy one of the example
+# directories and use the .gitignore file there as a starting place.
+
+# Don't assume the package manager being used
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Misc
+.DS_Store
+.vscode
