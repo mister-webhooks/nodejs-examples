@@ -9,7 +9,7 @@
     "dev": "tsx main.ts"
   },
   "dependencies": {
-    "@mister-webhooks/client": "0.0.4-beta.1",
+    "@mister-webhooks/client": "^0.0.5",
     "meow": "^13.2.0",
     "zod": "^3.25.42"
   },

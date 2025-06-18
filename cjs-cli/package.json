@@ -3,7 +3,7 @@
   "private": true,
   "license": "UNLICENSED",
   "dependencies": {
-    "@mister-webhooks/client": "^0.0.4",
+    "@mister-webhooks/client": "^0.0.5",
     "commander": "^14.0.0"
   }
 }
