@@ -28,10 +28,10 @@ const profileValidator = stringToJSONSchema.pipe(
 const cli = meow(
   `
   Usage
-    $ listen.ts --topic <topic> [--topic <additional-topics>] --file <path-to-connection-profile>
+    $ node dist/main.js --topic <topic> [--topic <additional-topics>] --file <path-to-connection-profile> [--offset EARLIEST | <ISODATE>]
 
   Examples
-    $ listen.ts 
+    $ node dist/main.js --topic incoming.foo.bar -f ./my-profile.json -
 `,
   {
     importMeta: import.meta,
@@ -46,11 +46,15 @@ const cli = meow(
         isRequired: true,
         type: 'string',
       },
+      offset: {
+        shortFlag: 'o',
+        type: 'string',
+      },
     },
   },
 )
 
-const { topic, file } = cli.flags
+const { topic, file, offset } = cli.flags
 const readProfile = (): z.infer<typeof profileValidator> => {
   try {
     const fileContents = fs.readFileSync(file, 'utf-8')
@@ -67,6 +71,23 @@ const readProfile = (): z.infer<typeof profileValidator> => {
   }
 }
 
+const getStartPoint = (): 'EARLIEST' | Date | undefined => {
+  if (!offset) {
+    return
+  }
+  if (offset === 'EARLIEST') {
+    return offset
+  }
+
+  const date = new Date(offset)
+  if (isFinite(date.valueOf())) {
+    return date
+  }
+
+  console.error('invalid offset')
+  process.exit(-1)
+}
+
 const profile = readProfile()
 
 const consumer = new MisterWebhooksConsumer({
@@ -76,6 +97,7 @@ const consumer = new MisterWebhooksConsumer({
     console.log(JSON.stringify(value, null, 2))
   },
   manualStart: true,
+  startPoint: getStartPoint(),
 })
 
 consumer.on('mrw.connected', () => {
